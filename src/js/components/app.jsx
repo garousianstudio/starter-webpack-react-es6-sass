@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Provider } from 'react-redux';
 import Intro from './intro';
 import NoMatch from './noMatch';
 import { getData } from '@/actions';
@@ -13,16 +14,17 @@ class App extends Component{
 	}
 	render() {
 		return (
-			<Router basename={process.env.BASENAME}>
-				<Switch>
-					<Route exact path="/" component={Intro}/>
-					<Route component={NoMatch} />
-				</Switch>
-			</Router>
+			<Provider store={this.props.store}>
+				<Router basename={process.env.BASENAME}>
+					<Switch>
+						<Route exact path="/" component={Intro}/>
+						<Route component={NoMatch} />
+					</Switch>
+				</Router>
+			</Provider>
 		);
 	}
 }
-
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({ getData }, dispatch);

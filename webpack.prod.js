@@ -12,7 +12,8 @@ const sass = {
   exclude: /node_modules/,
   use: [
     MiniCssExtractPlugin.loader,
-    'css-loader?importLoaders=2', // translates CSS into CommonJS
+    'css-loader?importLoaders=3', // translates CSS into CommonJS
+    'postcss-loader',
     'resolve-url-loader',
     'sass-loader', // compiles Sass to CSS
   ]
@@ -22,7 +23,8 @@ const css = {
   test: /\.css$/,
   use: [
     MiniCssExtractPlugin.loader,
-    'css-loader'
+    'css-loader',
+    'postcss-loader'
   ],
 };
 

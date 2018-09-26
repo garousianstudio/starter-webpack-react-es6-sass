@@ -33,13 +33,15 @@ const config = {
       index: 'index.html',
     },
     open: true,
+    hot: true,
   },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
         'BASENAME': JSON.stringify(''),
       },
-    })
+    }),
+    new webpack.HotModuleReplacementPlugin(),
   ]
 };
 
