@@ -1,0 +1,1 @@
+export const LOADING = 'app/app/LOADING';

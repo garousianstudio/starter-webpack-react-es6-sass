@@ -1,8 +1,9 @@
+@import "../library/library";
+
 html{
 	font-size: 16px;
-
-	@include mq_min($xlg){font-size: 18px;}
-	@include mq_min($xxlg){font-size: 20px;}
+	
+	@include mq_min($xxlg){font-size: 18px;}
 
 	&.rtl{
 		direction: rtl;
@@ -14,7 +15,7 @@ html{
 	}
 }
 body {
-	@extend %type_regular;
+	@extend %type-regular;
 	font-size: 1rem;
-	line-height: 1.7;
+	line-height: 1.7;	
 }

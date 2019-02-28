@@ -10,20 +10,20 @@ $z-layers: (
 /**
  * media query breakpoints
  */
-$xxs :400px;
-$xs :500px;
-$sm :800px;
-$md :1050px;
-$lg :1400px;
+$xxs: 400px;
+$xs: 500px;
+$sm: 800px;
+$md: 1050px;
+$lg: 1400px;
 $xlg: 1900px;
-$xxlg: 2500px;
-
+$xxlg: 2200px;
 
 /**
  * some useful dimensions
  * check width() in _function.scss
  */
 $widths: (
+  lg: rem(1200)
 );
 
 /**
@@ -33,11 +33,13 @@ $widths: (
 $heights: (
 );
 
-
 /**
  * colors
  * check color() in _function.scss
  */
 $colors: (
-	gray_3: #333333,
+	gray_e: #E6E6E6,
+	gray_c: #cccccc,
+	gray_6: #666666,
+	gray_3: #333333,	
 );

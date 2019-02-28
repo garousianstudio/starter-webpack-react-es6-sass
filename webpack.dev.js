@@ -1,31 +1,57 @@
+const path = require('path');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
 const common = require('./webpack.common.js');
 
 const PORT = 5080;
 
-// sass rule
+const CSSModuleLoader = {
+	loader: 'css-loader',
+	options: {
+		modules: true,
+		sourceMap: true,
+		localIdentName: '[local]__[hash:base64:5]'
+	}
+};
+
 const sass = {
 	test: /\.scss$/,
-	exclude: /node_modules/,
+	include: path.resolve(__dirname, 'src/scss'),
 	use: [
-		'style-loader', // creates style nodes from JS strings
-		'css-loader?importLoaders=2&sourceMap', // translates CSS into CommonJS
+		'style-loader', // creates style nodes from JS strings		
+		{ // translates CSS into CommonJS
+			loader: 'css-loader',
+			options: {
+				importLoaders: 2,
+				sourceMap: true,
+			},
+		},
 		'resolve-url-loader',
 		'sass-loader?sourceMap', // compiles Sass to CSS
 	]
 };
-// css rule
+
 const css = {
-  test: /\.css$/,
+	test: /\.css$/,	
   use: ['style-loader', 'css-loader'],
+};
+
+const sassModules = {
+	test: /\.(scss|sass)$/,
+	include: path.resolve(__dirname, 'src/js'),
+	use: [
+		'style-loader',
+		CSSModuleLoader,
+		'resolve-url-loader',
+		'sass-loader?sourceMap' // compiles Sass to CSS, using Node Sass by default
+	]
 };
 
 const config = {
   mode: 'development',
   devtool: 'source-map',
   module: {
-    rules: [sass, css]
+    rules: [sassModules, sass, css]
   },
   devServer: {
     port: PORT,

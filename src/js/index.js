@@ -5,10 +5,10 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import { AppContainer } from 'react-hot-loader';
-import reducers from '@/reducers';
-import App from '@/components/app';
+import reducers from './reducers';
+import App from 'js/components/app';
 
-import 'scss/main';
+import 'scss/base/base';
 
 const store = createStore(
 	reducers,
@@ -27,8 +27,8 @@ const render = Component => {
 render(App);
 
 if (module.hot) {
-  module.hot.accept('@/components/app', () => {
-    const NextApp = require('@/components/app').default;
+  module.hot.accept('js/components/app', () => {
+    const NextApp = require('js/components/app').default;
     render(NextApp);
   });
 }

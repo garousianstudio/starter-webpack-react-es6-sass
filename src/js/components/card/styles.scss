@@ -1,0 +1,28 @@
+@import "../../../scss/library/library";
+
+.wrap{
+	background-color: #fff;
+	border-radius: rem(5);
+	border: 1px solid #e3e3e3;
+	padding: rem(20) rem(15);
+	transition: all 0.1s;
+
+	&:hover{
+		box-shadow: rem(2) rem(7) rem(10) rgba(#000, 0.13);
+	}
+
+	footer{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+}
+.title{
+	font-size: rem(20);
+	color: color(gray_3);
+	margin-bottom: rem(15);
+}
+.desc{	
+	color: color(gray_6);
+	margin-bottom: rem(10);
+}

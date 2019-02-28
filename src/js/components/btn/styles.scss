@@ -1,0 +1,18 @@
+@import "../../../scss/library/library";
+
+.btn{
+	padding: rem(7) rem(20);
+	border-radius: rem(5);
+	background-color: cornflowerblue;
+	color: #fff;
+	
+	&:hover{
+		background-color: darken(cornflowerblue, 15%);
+	}
+	&:active{
+		transform: translateY(1px);
+	}
+	&:focus{
+		outline: 2px solid lighten(cornflowerblue, 15%);
+	}
+}

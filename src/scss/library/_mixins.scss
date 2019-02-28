@@ -8,7 +8,7 @@
 @mixin mq_min($width){
 	@media only screen and (min-width: $width + 1){@content;}
 }
-@mixin mq_min_max($min_width,$max_width){
+@mixin mq_min_max($min_width, $max_width){
 	@media only screen and (min-width: $min_width) and (max-width: $max_width){@content;}
 }
 
@@ -71,19 +71,20 @@
  * @param  {boolean} $vertical
  * @param  {boolean} $horizontal
  */
-@mixin centered($vertical,$horizontal){
+@mixin centered($vertical, $horizontal){
 	position: absolute;
+
 	@if($vertical and $horizontal){
 		left: 50%;
-		top:50%;
-    transform: translate(-50%,-50%);
-	}
-	@elseif($vertical){
-		left:50%;
-    transform: translateX(-50%);
+		top: 50%;
+    transform: translate(-50%, -50%);
 	}
 	@elseif($horizontal){
-		top:50%;
+		left: 50%;
+    transform: translateX(-50%);
+	}
+	@elseif($vertical){
+		top: 50%;
     transform: translateY(-50%);
 	}
 }

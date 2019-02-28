@@ -2,6 +2,8 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 
+const isDev = process.env.NODE_ENV == 'development' ? true : false;
+
 // javascript rule
 const javascript = {
   test: /\.jsx?$/,
@@ -24,13 +26,12 @@ const fonts = {
 };
 // sprite svg rule
 const spriteSvg = {
-  test: /\.svg$/,
-  exclude: /(node_modules)/,
+  test: /\.svg$/,  
   include: path.resolve(__dirname, 'src/svg'),
   loader: 'svg-sprite-loader',
   options: {
-    extract: true,
-    publicPath: ''
+		symbolId: '[name]',
+    extract: true,    
   }
 };
 
@@ -48,11 +49,11 @@ const config = {
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src/js'),
+      'js': path.resolve(__dirname, './src/js'),
       'scss': path.resolve(__dirname, './src/scss'),
       'svg': path.resolve(__dirname, './src/svg'),
     },
-    extensions: ['.js', '.jsx', '.scss']
+    extensions: ['.js', '.jsx', '.scss', '.svg']
   },
   stats: {
     colors: true,

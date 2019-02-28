@@ -1,24 +1,41 @@
+const path = require('path');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
 const common = require('./webpack.common.js');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
-// define basename if project is not deployed in root of server
-const BASENAME = '/path/to/folder';
+// define basename if project is not deployed in root of server e.g. '/path/to/folder'
+const BASENAME = '';
 
-// sass rule
+const CSSModuleLoader = {
+	loader: 'css-loader',
+	options: {
+		modules: true,
+		sourceMap: true,
+		localIdentName: '[local]__[hash:base64:5]'
+	}
+};
+
 const sass = {
   test: /\.scss$/,
-  exclude: /node_modules/,
-  use: [
-    MiniCssExtractPlugin.loader,
-    'css-loader?importLoaders=3', // translates CSS into CommonJS
-    'postcss-loader',
-    'resolve-url-loader',
-    'sass-loader', // compiles Sass to CSS
-  ]
+	include: path.resolve(__dirname, 'src/scss'),
+	use: [
+		MiniCssExtractPlugin.loader,
+		{ // translates CSS into CommonJS
+			loader: 'css-loader',
+			options: {
+				importLoaders: 3,
+				sourceMap: true,
+			},
+		},
+		'postcss-loader',
+		'resolve-url-loader',
+		'sass-loader?sourceMap', // compiles Sass to CSS 
+	]  
 };
-// css rule
+
 const css = {
   test: /\.css$/,
   use: [
@@ -28,12 +45,34 @@ const css = {
   ],
 };
 
+const sassModules = {
+	test: /\.(scss|sass)$/,
+	include: path.resolve(__dirname, 'src/js'),
+	use: [
+		MiniCssExtractPlugin.loader,
+		CSSModuleLoader,
+		'postcss-loader',
+		'resolve-url-loader',
+		'sass-loader?sourceMap' // compiles Sass to CSS, using Node Sass by default
+	]
+};
+
 const config = {
   mode: 'production',
   devtool: 'source-map',
   module: {
-    rules: [sass, css]
-  },
+    rules: [sassModules, sass, css]
+	},
+	optimization: {
+		minimizer: [
+			new UglifyJsPlugin({
+				cache: true,
+				parallel: true,
+				sourceMap: true
+			}),
+			new OptimizeCSSAssetsPlugin({})
+		]
+	},
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
