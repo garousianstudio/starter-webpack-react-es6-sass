@@ -2,18 +2,9 @@ import 'whatwg-fetch';
 import 'svgxuse';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
-import ReduxThunk from 'redux-thunk';
 import { AppContainer } from 'react-hot-loader';
-import reducers from './reducers';
-import App from 'js/components/app';
-
-import 'scss/base/base';
-
-const store = createStore(
-	reducers,
-	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), // chrome redux devtools extension
-	applyMiddleware(ReduxThunk));
+import App from 'js/containers/App';
+import store from './store';
 
 const render = Component => {
   ReactDOM.render(
@@ -27,8 +18,8 @@ const render = Component => {
 render(App);
 
 if (module.hot) {
-  module.hot.accept('js/components/app', () => {
-    const NextApp = require('js/components/app').default;
+  module.hot.accept('js/containers/App', () => {
+    const NextApp = require('js/containers/App').default;
     render(NextApp);
   });
 }

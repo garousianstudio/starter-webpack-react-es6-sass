@@ -3,11 +3,10 @@ const merge = require('webpack-merge');
 const webpack = require('webpack');
 const common = require('./webpack.common.js');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-// define basename if project is not deployed in root of server e.g. '/path/to/folder'
-const BASENAME = '';
 
 const CSSModuleLoader = {
 	loader: 'css-loader',
@@ -32,8 +31,8 @@ const sass = {
 		},
 		'postcss-loader',
 		'resolve-url-loader',
-		'sass-loader?sourceMap', // compiles Sass to CSS 
-	]  
+		'sass-loader?sourceMap', // compiles Sass to CSS
+	]
 };
 
 const css = {
@@ -57,32 +56,43 @@ const sassModules = {
 	]
 };
 
+const plugins = (() => {
+  const result = [
+    new MiniCssExtractPlugin({
+      filename: '[name].[contenthash].css'
+    })
+  ];
+
+  if (process.env.ANALYZE) {
+    /** add bundle analyzer in 'build:analyze' task */
+    result.push(new BundleAnalyzerPlugin());
+  }
+
+  return result;
+})();
+
 const config = {
   mode: 'production',
   devtool: 'source-map',
   module: {
     rules: [sassModules, sass, css]
-	},
-	optimization: {
-		minimizer: [
-			new UglifyJsPlugin({
-				cache: true,
-				parallel: true,
-				sourceMap: true
-			}),
-			new OptimizeCSSAssetsPlugin({})
-		]
-	},
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        'BASENAME': JSON.stringify(BASENAME),
-      },
-    }),
-    new MiniCssExtractPlugin({
-      filename: 'style.css',
-    }),
-  ]
+  },
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true,
+        terserOptions: {
+          compress: {
+            drop_console: true
+          }
+        }
+      }),
+      new OptimizeCSSAssetsPlugin({})
+    ]
+  },
+  plugins: plugins
 };
 
 module.exports = merge(common, config);

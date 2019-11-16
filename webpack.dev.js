@@ -2,9 +2,11 @@ const path = require('path');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
 const common = require('./webpack.common.js');
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
-const PORT = 5080;
-
+/**
+ * custom css loader to work with sass module (css module with sass enabled)
+ */
 const CSSModuleLoader = {
 	loader: 'css-loader',
 	options: {
@@ -14,11 +16,12 @@ const CSSModuleLoader = {
 	}
 };
 
+/** pure sass loader  */
 const sass = {
 	test: /\.scss$/,
 	include: path.resolve(__dirname, 'src/scss'),
 	use: [
-		'style-loader', // creates style nodes from JS strings		
+		'style-loader', // creates style nodes from JS strings
 		{ // translates CSS into CommonJS
 			loader: 'css-loader',
 			options: {
@@ -31,11 +34,16 @@ const sass = {
 	]
 };
 
+/**
+ * pure css rule
+ * css files can be imported directly in components
+ */
 const css = {
-	test: /\.css$/,	
+	test: /\.css$/,
   use: ['style-loader', 'css-loader'],
 };
 
+/** css module (with sass) rule */
 const sassModules = {
 	test: /\.(scss|sass)$/,
 	include: path.resolve(__dirname, 'src/js'),
@@ -47,6 +55,29 @@ const sassModules = {
 	]
 };
 
+/**
+ * check if 'PORT_BROWSER_SYNC' is set in '.env' and add browser sync plugin
+ */
+const plugins = (() => {
+  const result = [new webpack.HotModuleReplacementPlugin()];
+
+  if (process.env.PORT_BROWSER_SYNC) {
+    result.push(
+      new BrowserSyncPlugin(
+        {
+          host: 'localhost',
+          port: process.env.PORT_BROWSER_SYNC,
+          proxy: `http://localhost:${process.env.PORT}`
+        },
+        { reload: false }
+      )
+    );
+  }
+
+  return result;
+})();
+
+
 const config = {
   mode: 'development',
   devtool: 'source-map',
@@ -54,21 +85,14 @@ const config = {
     rules: [sassModules, sass, css]
   },
   devServer: {
-    port: PORT,
+    port: process.env.PORT,
     historyApiFallback: {
-      index: 'index.html',
+      index: 'index.html'
     },
     open: true,
-    hot: true,
+    hot: true
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        'BASENAME': JSON.stringify(''),
-      },
-    }),
-    new webpack.HotModuleReplacementPlugin(),
-  ]
+  plugins: plugins
 };
 
 module.exports = merge(common, config);

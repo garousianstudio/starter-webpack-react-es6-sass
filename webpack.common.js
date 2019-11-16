@@ -1,69 +1,90 @@
 const path = require('path');
+const webpack = require("webpack");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
+const dotenv = require('dotenv');
 
-const isDev = process.env.NODE_ENV == 'development' ? true : false;
+dotenv.config({ path: ".env" });
 
-// javascript rule
+/** javascript rule */
 const javascript = {
   test: /\.jsx?$/,
   exclude: /node_modules/,
   use: {
     loader: 'babel-loader',
     options: {
-      presets: ['react', 'es2015', 'env'],
-      plugins: ['transform-object-rest-spread'],
+      presets: [
+        '@babel/preset-react',
+        [
+          '@babel/preset-env',
+          {
+            useBuiltIns: 'usage',
+            corejs: 3,
+          }
+        ]
+      ],
+      plugins: [
+        '@babel/plugin-proposal-object-rest-spread',
+        '@babel/plugin-transform-strict-mode',
+        '@babel/plugin-syntax-dynamic-import',
+      ],
     }
   }
 };
-// fonts rule
-const fonts = {
-	test: /\.(woff|woff2|eot|ttf)$/,
-	exclude: /(node_modules)/,
-	use: {
-		loader: 'file-loader',
-	},
+
+/**
+ * all files rule including fonts
+ * 'include' key is needed to not interfere sprite svg rule
+ */
+const files = {
+  test: /\.(jpg|jpeg|png|gif|svg|pdf|woff|woff2|eot|ttf)$/,
+  loader: 'file-loader',
+  include: path.resolve(__dirname, 'assets')
 };
-// sprite svg rule
+
+/** sprite svg rule */
 const spriteSvg = {
-  test: /\.svg$/,  
+  test: /\.svg$/,
   include: path.resolve(__dirname, 'src/svg'),
   loader: 'svg-sprite-loader',
   options: {
 		symbolId: '[name]',
-    extract: true,    
   }
 };
 
+
 const config = {
-  entry: [
-    'whatwg-fetch',
-    './src/js/index.js'
-  ],
+  entry: ['./src/js/index.js'],
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
   },
   module: {
-    rules: [javascript, fonts, spriteSvg]
+    rules: [javascript, files, spriteSvg]
   },
   resolve: {
     alias: {
-      'js': path.resolve(__dirname, './src/js'),
-      'scss': path.resolve(__dirname, './src/scss'),
-      'svg': path.resolve(__dirname, './src/svg'),
+      js: path.resolve(__dirname, './src/js'),
+      scss: path.resolve(__dirname, './src/scss'),
+      svg: path.resolve(__dirname, './src/svg'),
+      assets: path.resolve(__dirname, './assets')
     },
     extensions: ['.js', '.jsx', '.scss', '.svg']
   },
   stats: {
-    colors: true,
+    colors: true
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env),
+    }),
     new HtmlWebpackPlugin({
       template: './index.html',
+      base: process.env.PATH_ROOT,
+      cache: true,
       hash: true,
+      favicon: path.resolve(__dirname, './assets/favicon/logo.png'),
     }),
-    new SpriteLoaderPlugin()
   ]
 };
 

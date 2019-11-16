@@ -1,7 +1,7 @@
 import React from 'react';
-import Btn from '../btn';
+import Btn from '../Btn';
 import styles from './styles';
-import Icon from '../icon';
+import Icon from '../Icon';
 import user from 'svg/user';
 
 export default props => (

@@ -1,1 +1,0 @@
-export const GET_POSTS = 'app/card-list/GET_POSTS';
