@@ -1,0 +1,18 @@
+@import "../../../scss/library/library";
+
+.wrap{
+	max-width: width(lg);
+	margin: 0 auto;
+}
+
+.p{
+	margin-bottom: rem(10);
+
+	a{
+		color: cornflowerblue;
+
+		&:hover{
+			color: darken(cornflowerblue, 15%);
+		}
+	}
+}

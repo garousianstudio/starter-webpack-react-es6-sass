@@ -1,0 +1,23 @@
+@import "../../../scss/library/library";
+
+.wrap{
+	min-height: 100vh;
+	padding: rem(30);
+	background-color: #f3f3f3;
+}
+
+.title{
+	margin-bottom: rem(10);
+}
+
+.icon{
+	width: rem(50);
+	height: rem(50);
+	fill: tomato;
+}
+
+.instagram{
+	width: rem(50);
+	height: rem(50);
+	fill: cornflowerblue;
+}

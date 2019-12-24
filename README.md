@@ -10,6 +10,8 @@ Front-end starter kit with tools for development:
 
 ## Usage
 
+Minimum node version: 12
+
 1. First clone the project:
 ```
 git clone https://github.com/garousianstudio/starter-webpack-react-es6-sass.git
@@ -31,7 +33,7 @@ By default some sample code is available in starter kit to demonstrate how thing
 
 ## Tasks
 ```
-npm dev => start webpack dev server for development
+npm run dev => start webpack dev server for development
 npm run clean => clean previously generated 'dist' folder
 npm run build => use it for production
 npm run build:analyze => build project with bundle analyzer

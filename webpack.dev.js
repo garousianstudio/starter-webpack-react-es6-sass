@@ -86,9 +86,7 @@ const config = {
   },
   devServer: {
     port: process.env.PORT,
-    historyApiFallback: {
-      index: 'index.html'
-    },
+    historyApiFallback: true,
     open: true,
     hot: true
   },

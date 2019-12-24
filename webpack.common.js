@@ -42,15 +42,43 @@ const files = {
   include: path.resolve(__dirname, 'assets')
 };
 
-/** sprite svg rule */
-const spriteSvg = {
+/**
+ * loader for svg files inside 'src/svg' directory
+ * there are two loaders. one for sprite svg using 'svg-sprite-loader'
+ * the other one for embeding inline svg using 'react-svg-loader'
+ * NOTE: to use inline svg, add 'inline' query at the end of file path e.g. import User from 'svg/user?inline'
+ */
+const svg = {
   test: /\.svg$/,
   include: path.resolve(__dirname, 'src/svg'),
-  loader: 'svg-sprite-loader',
-  options: {
-		symbolId: '[name]',
-  }
-};
+  oneOf: [
+    {
+      resourceQuery: /inline/,
+      use: [{
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            '@babel/preset-react',
+            '@babel/preset-env',
+          ],
+        }
+
+      }, 'react-svg-loader'],
+    },
+    {
+      use: [
+        {
+          loader: 'svg-sprite-loader',
+          options: { symbolId: '[name]' },
+        },
+        {
+          loader: 'svgo-loader',
+          options: {}
+        }
+      ]
+    },
+  ],
+}
 
 
 const config = {
@@ -60,13 +88,14 @@ const config = {
     filename: 'bundle.js'
   },
   module: {
-    rules: [javascript, files, spriteSvg]
+    rules: [javascript, files, svg]
   },
   resolve: {
     alias: {
       js: path.resolve(__dirname, './src/js'),
       scss: path.resolve(__dirname, './src/scss'),
       svg: path.resolve(__dirname, './src/svg'),
+      'svg-inline': path.resolve(__dirname, './src/svg-inline'),
       assets: path.resolve(__dirname, './assets')
     },
     extensions: ['.js', '.jsx', '.scss', '.svg']

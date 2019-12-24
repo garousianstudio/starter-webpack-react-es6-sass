@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Link } from 'react-router-dom';
 import { fetchPosts } from './actions';
 import Card from 'js/components/Card';
 import styles from './styles';
-import Title from './title';
 
 
 class CardList extends Component{
@@ -24,13 +24,11 @@ class CardList extends Component{
 	render() {
 		return (
       <div className={styles.wrap}>
-        <Title>Welcome to Garousian Studio React/Redux Starter Kit! :)</Title>
-
         {this.state.isLoading ? (
           <div>Loading content...</div>
         ) : (
           <div className="row">
-            {this.props.postList.map(post => (
+            {this.props.list.map(post => (
               <div className="col-xs-8" key={post.id}>
                 <Card {...post} />
               </div>
@@ -42,7 +40,7 @@ class CardList extends Component{
 	}
 }
 
-const mapStateToProps = state => ({ postList: state.postList });
+const mapStateToProps = state => ({ list: state.list });
 
 const mapDispatchToProps = dispatch => bindActionCreators({ fetchPosts }, dispatch);
 
